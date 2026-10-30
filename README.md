@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # codeintel-Git-Metadata-Analyzer
 Analyzes a git repository's metadata (author email patterns, commit message conventions, branch naming, etc.) to identify potential anomalies indicative of malicious activity, such as impersonation or code injection, providing a risk score. - Focused on Tools for static code analysis, vulnerability scanning, and code quality assurance
 
