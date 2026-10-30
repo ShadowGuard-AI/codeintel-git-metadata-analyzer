@@ -76,13 +76,14 @@ def run_git_command(repo_path: str, command: List[str]) -> str:
     Raises:
         subprocess.CalledProcessError: If the git command fails.
     """
+    # The command goes to git as an argv list with no shell, so a repo
+    # path containing spaces or metacharacters stays a single argument.
     try:
         result = subprocess.run(
             ["git", "-C", repo_path] + command,
             capture_output=True,
             text=True,
             check=True,
-            security=True,  # Added security check
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
@@ -105,9 +106,12 @@ def analyze_author_emails(
     """
     try:
         # Retrieve all author emails and their counts
+        # One address per line is the invariant the counting below relies
+        # on; a --shortstat flag here once interleaved blank and file
+        # change lines that were then counted as addresses.
         log_output = run_git_command(
             repo_path,
-            ["log", "--pretty=format:%ae", "--shortstat"],  # Modified git log command
+            ["log", "--pretty=format:%ae"],
         )
         emails = log_output.splitlines()
         if not emails:
@@ -304,8 +308,10 @@ def save_analysis_report(
                 else:
                     f.write("No email anomalies found.\n")
             else:
+                # Statuses other than success/error (notably "no commits
+                # found") carry no message key, so .get is load bearing.
                 f.write(
-                    f"Error analyzing emails: {analysis_results['author_emails']['message']}\n"
+                    f"Email analysis unavailable: {analysis_results['author_emails'].get('message', analysis_results['author_emails'].get('status', 'unknown'))}\n"
                 )
 
             f.write("\n### Commit Message Validation ###\n")
@@ -323,7 +329,7 @@ def save_analysis_report(
                     f.write("All commit messages are valid.\n")
             else:
                 f.write(
-                    f"Error validating commit messages: {analysis_results['commit_messages']['message']}\n"
+                    f"Commit message check unavailable: {analysis_results['commit_messages'].get('message', analysis_results['commit_messages'].get('status', 'unknown'))}\n"
                 )
 
             f.write("\n### Branch Name Validation ###\n")
@@ -339,7 +345,7 @@ def save_analysis_report(
                     f.write("All branch names are valid.\n")
             else:
                 f.write(
-                    f"Error validating branch names: {analysis_results['branch_names']['message']}\n"
+                    f"Branch name check unavailable: {analysis_results['branch_names'].get('message', analysis_results['branch_names'].get('status', 'unknown'))}\n"
                 )
 
             f.write("\n### Offensive Security Tools Analysis ###\n")

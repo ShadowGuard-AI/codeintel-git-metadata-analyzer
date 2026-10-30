@@ -1,3 +1,5 @@
+# main.py itself uses only the standard library. The packages below are
+# the external tools it invokes only when --offensive_tools is passed.
 bandit>=1.0.0
 flake8>=1.0.0
 pylint>=1.0.0
