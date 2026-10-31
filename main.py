@@ -233,6 +233,20 @@ def run_offensive_tools(repo_path: str) -> Dict[str, Any]:
     return results
 
 
+def _tool_output_is_failure(output: str) -> bool:
+    """True when a tool output reports the tool as missing or failed."""
+    lowered = output.lower()
+    markers = (
+        "error:",
+        "is not installed",
+        "not installed",
+        "not configured",
+        "failed to run",
+        "failed:",
+    )
+    return any(marker in lowered for marker in markers)
+
+
 def generate_risk_score(analysis_results: Dict[str, Any]) -> float:
     """
     Generates a risk score based on the analysis results.
@@ -272,7 +286,7 @@ def generate_risk_score(analysis_results: Dict[str, Any]) -> float:
     # Offensive Tool Findings (simplified - more granular analysis needed in real-world)
     if "offensive_tools" in analysis_results:
         for tool, output in analysis_results["offensive_tools"].items():
-            if "Error" not in output and output: # If no error and there is output, flag it.
+            if output and not _tool_output_is_failure(output):
                 risk_score += 0.4  # Higher risk for tool findings.  Needs more sophisticated parsing in real world.
 
     return min(risk_score, 1.0)  # Ensure risk score is between 0 and 1
@@ -280,7 +294,7 @@ def generate_risk_score(analysis_results: Dict[str, Any]) -> float:
 
 def save_analysis_report(
     analysis_results: Dict[str, Any], risk_score: float, output_file: str
-) -> None:
+) -> bool:
     """
     Saves the analysis results to a file.
 
@@ -357,9 +371,11 @@ def save_analysis_report(
                 f.write("Offensive tools not run.\n")
 
         logging.info(f"Analysis report saved to {output_file}")
+        return True
 
     except Exception as e:
         logging.error(f"Error saving analysis report: {e}")
+        return False
 
 
 def main() -> None:
@@ -393,7 +409,9 @@ def main() -> None:
 
         risk_score = generate_risk_score(analysis_results)
 
-        save_analysis_report(analysis_results, risk_score, args.output_file)
+        if not save_analysis_report(analysis_results, risk_score, args.output_file):
+            logging.error("Analysis report was not saved.")
+            sys.exit(1)
 
         print(f"Analysis complete. Risk score: {risk_score:.2f}. See {args.output_file} for details.")
 
