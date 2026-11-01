@@ -149,6 +149,9 @@ def validate_commit_messages(
         Dict[str, Any]: A dictionary containing the analysis results.
     """
     try:
+        # I check only the subject line of each message. A commit with a
+        # clean subject and a body that breaks the pattern passes, and a
+        # multi line subject is not something git produces here anyway.
         log_output = run_git_command(repo_path, ["log", "--pretty=format:%s"])
         messages = log_output.splitlines()
         invalid_messages = []
@@ -173,6 +176,9 @@ def validate_branch_names(repo_path: str, pattern: str) -> Dict[str, Any]:
         Dict[str, Any]: A dictionary containing the analysis results.
     """
     try:
+        # I list local branches only. Remote branches, which are often
+        # the ones a team actually shares, are never checked against
+        # the pattern unless someone fetched them as local names.
         branches_output = run_git_command(repo_path, ["branch", "--list"])
         branches = [
             branch.strip().replace("* ", "") for branch in branches_output.splitlines()
@@ -265,6 +271,9 @@ def generate_risk_score(analysis_results: Dict[str, Any]) -> float:
         and analysis_results["author_emails"]["status"] == "success"
         and analysis_results["author_emails"]["anomalies"]
     ):
+        # I use flat weights: any anomaly in a category adds its whole
+        # amount, whether it is one commit or half the history. The
+        # score says which kinds of problem exist, not how much of each.
         risk_score += 0.3  # Higher risk for email anomalies
 
     # Commit Message Validation
