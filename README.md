@@ -1,13 +1,34 @@
-![Banner](banner.png)
+![Foghorn station with no lettering: the horn on the engine house wall facing the water, oil lanterns on the step, tarred barrels by the door, coiled rope on a peg, signal flags on their halyard, fog at the edges, and low sun laying a bright road on the water](intro-banner.png)
 
 # codeintel-Git-Metadata-Analyzer
+
+Ship log treatment: the title is set in Beau Rivage on a sand plate, ruled beneath, with a small rope knot at the left, and headings read as entries in a station log, with the small horn as the section marker throughout.
+
+![One foghorn horn alone and centred: wide bell, short throat, mounting plate at the rear, kelp green shadow side, sand lit edge, iron black outline, and signal red once only on the small valve cap, with the name in the station log hand below](logo.png)
+
+![The engine house at the fog edge: horn on the wall facing the water, lanterns on the step, tarred barrels by the door, coiled rope, signal flags on the halyard, fog beyond, and the title once on the house board above the door](banner.png)
+
+![Station in three bands: fog thickens and thins at the edges, the fixed horn darkens at the bell rim twice in a long cycle, a lantern flame flickers at the wick, and the flags lift a little in a brief wind and settle](scene.svg)
+
+
 Analyzes a git repository's metadata (author email patterns, commit message conventions, branch naming, etc.) to identify potential anomalies indicative of malicious activity, such as impersonation or code injection, providing a risk score. - Focused on Tools for static code analysis, vulnerability scanning, and code quality assurance
+
+
+![Major separator: a wave swell rolling left to right under a tiny lantern](sep-heavy.svg)
 
 ## Install
 `git clone https://github.com/ShadowGuardAI/codeintel-git-metadata-analyzer`
 
+> **Log margin slip, flagged in place.** The install line above reads git clone https://github.com/ShadowGuardAI/codeintel-git-metadata-analyzer. The name in it is unhyphenated; the correct form is ShadowGuard-AI. The line is preserved exactly as printed and flagged here, never silently fixed.
+
+
+![Minor separator: a wave swell rolling left to right under a tiny lantern](sep-light.svg)
+
 ## Usage
 `./codeintel-git-metadata-analyzer [params]`
+
+
+![Major separator: a wave swell rolling left to right under a tiny lantern](sep-heavy.svg)
 
 ## Parameters
 - `-h`: Show help message and exit
@@ -17,5 +38,12 @@ Analyzes a git repository's metadata (author email patterns, commit message conv
 - `--output_file`: Path to output file to save analysis results.
 - `--offensive_tools`: No description provided
 
+> **Log margin slip, on the score.** The risk score this tool adds counts kinds, not amounts: one odd address scores the same as half the history. The README promise of a risk score stands above; this slip keeps its measure plain.
+
+
+![Minor separator: a wave swell rolling left to right under a tiny lantern](sep-light.svg)
+
 ## License
 Copyright (c) ShadowGuardAI
+
+> **Log margin slip, flagged in place.** The closing line above reads Copyright (c) ShadowGuardAI, the same unhyphenated fault a second time, while the repository LICENSE file carries the MIT License. Both stand as printed.
