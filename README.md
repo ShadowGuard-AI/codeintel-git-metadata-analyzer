@@ -1,12 +1,10 @@
-![Foghorn station with no lettering: the horn on the engine house wall facing the water, oil lanterns on the step, tarred barrels by the door, coiled rope on a peg, signal flags on their halyard, fog at the edges, and low sun laying a bright road on the water](intro-banner.png)
+![The mounted lens over a polished pine disc close up, the growth rings filling the frame beneath it and a slender increment core at the frame edge](intro-banner.png)
 
 # codeintel-Git-Metadata-Analyzer
 
 Ship log treatment: the title is set in Beau Rivage on a sand plate, ruled beneath, with a small rope knot at the left, and headings read as entries in a station log, with the small horn as the section marker throughout.
 
-![One foghorn horn alone and centred: wide bell, short throat, mounting plate at the rear, kelp green shadow side, sand lit edge, iron black outline, and signal red once only on the small valve cap, with the name in the station log hand below](logo.png)
-
-![The engine house at the fog edge: horn on the wall facing the water, lanterns on the step, tarred barrels by the door, coiled rope, signal flags on the halyard, fog beyond, and the title once on the house board above the door](banner.png)
+![One polished cross section disc of a pine trunk with its growth rings clear from bark rim to centre, a brass increment borer lying across it](logo.png)
 
 ![Station in three bands: fog thickens and thins at the edges, the fixed horn darkens at the bell rim twice in a long cycle, a lantern flame flickers at the wick, and the flags lift a little in a brief wind and settle](scene.svg)
 
