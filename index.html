@@ -3,23 +3,97 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>codeintel-git-metadata-analyzer: The Foghorn Station</title>
-<meta name="description" content="A station log read watch by watch: author addresses counted, commit subjects and local branch names checked against their patterns, and a risk score added by kind.">
-<style>@font-face{font-family:'Beau Rivage';src:url('fonts/Beau RivageF') format('truetype');}@font-face{font-family:'Barlow.ttf';src:url('fonts/Barlow.ttf') format('truetype');}:root{--a:#1b1b1b;--b:#2e5e4e;--c:#e4d5a8;--ink:#1b1b1b}*{box-sizing:border-box}body{margin:0;background:var(--a);color:var(--ink);font-family:'Barlow.ttf',sans-serif;line-height:1.65}h1,h2,h3{font-family:'Beau Rivage',sans-serif;color:var(--b)}.heroimg{width:100%;height:52vh;object-fit:cover;display:block}.in,main,footer{max-width:1000px;margin:0 auto;padding:1rem 5vw 2rem}.logo{width:230px}.btn{display:inline-block;text-decoration:none;font-family:'Beau Rivage',sans-serif;color:var(--ink);background:var(--c);border:2px solid var(--b);padding:.7rem 1.2rem;margin:.3rem;transition:background .15s,transform .15s}.btn:hover{filter:brightness(1.18)}.btn:active{transform:translateY(3px)}.btn:focus-visible{outline:3px solid var(--b);outline-offset:4px}nav{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}main a{color:var(--b)}main a::before{content:'\1F56F  ';font-size:.85em}.panel{background:var(--c);padding:.4rem 1.5rem 1.4rem;margin:1.6rem 0}.callout{border-left:8px solid var(--b);padding:.2rem 1.2rem 1rem;margin:1.2rem 0;background:rgba(0,0,0,.08)}pre{background:#22303c;color:#f5edd6;padding:1rem;overflow-x:auto}table{border-collapse:collapse}td,th{border:1px solid var(--b);padding:.35rem .8rem;text-align:left}.div{height:10px;border-top:2px solid var(--b);margin:1.4rem 0}header .in p,header h1{color:var(--c)}footer,footer p{color:var(--c)}</style>
+<title>codeintel-git-metadata-analyzer: The Ring Record</title>
+<style>
+@font-face { font-family: "Kaisei HarunoUmi"; src: url("fonts/KaiseiHarunoUmi-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Kaisei HarunoUmi"; src: url("fonts/KaiseiHarunoUmi-700.woff2") format("woff2"); font-weight: 700; }
+@font-face { font-family: "Zen Old Mincho"; src: url("fonts/ZenOldMincho-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Zen Old Mincho"; src: url("fonts/ZenOldMincho-700.woff2") format("woff2"); font-weight: 700; }
+:root {
+  --paper: #faf6ec; --cream: #efe6d0; --ink: #2e2418; --soft: #6f5f49;
+  --accent: #a86e14; --deep: #5f4632; --line: #ddcfb0; --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: "Zen Old Mincho", sans-serif; line-height: 1.55; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 64px; }
+header.hero { text-align: center; padding: 52px 0 8px; }
+img.hero-logo { width: min(430px, 82vw); border-radius: 10px; box-shadow: 0 10px 34px rgba(70,52,20,.22); }
+h1, h2 { font-family: "Kaisei HarunoUmi", sans-serif; line-height: 1.15; font-weight: 400; }
+h1 { font-size: clamp(26px, 5vw, 44px); margin: 26px 0 6px; }
+.tagline { color: var(--soft); font-size: 19px; margin: 0 auto; max-width: 680px; }
+.btns { margin: 22px 0 6px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+a.btn { font-family: "Kaisei HarunoUmi", sans-serif; text-decoration: none; padding: 11px 22px; border-radius: 999px; border: 2px solid var(--accent); color: var(--accent); background: transparent; }
+a.btn.solid { background: var(--deep); border-color: var(--deep); color: #fff; }
+figure { margin: 30px 0; }
+figure img { width: 100%; border-radius: 10px; display: block; box-shadow: 0 8px 28px rgba(70,52,20,.22); }
+figcaption { color: var(--soft); font-size: 15px; text-align: center; margin-top: 9px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 34px 0; }
+.fact { background: var(--card); border: 1px solid var(--line); border-top: 5px solid var(--accent); border-radius: 8px; padding: 14px 16px; }
+.fact b { display: block; font-family: "Kaisei HarunoUmi", sans-serif; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+section { margin: 38px 0; }
+h2 { font-size: 27px; margin: 0 0 12px; border-bottom: 2px solid var(--line); padding-bottom: 7px; }
+code, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+pre { background: #2e2416; color: #f3ecd9; padding: 15px 18px; border-radius: 8px; overflow-x: auto; font-size: 14.5px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); }
+th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { font-family: "Kaisei HarunoUmi", sans-serif; background: var(--cream); }
+.hold { background: #fbf3e2; border: 1px solid #e6d3a8; border-left: 6px solid var(--accent); border-radius: 8px; padding: 16px 20px; }
+.hold h2 { border: none; padding: 0; }
+.hold ul { margin: 8px 0 4px; padding-left: 20px; }
+footer { margin-top: 52px; border-top: 2px solid var(--line); padding-top: 16px; color: var(--soft); font-size: 14.5px; text-align: center; }
+</style>
 </head>
 <body>
+<div class="wrap">
 <header class="hero">
-<img class="heroimg" src="assets/intro-banner.png" alt="Foghorn station with no lettering: the horn on the engine house wall, oil lanterns and tarred barrels at rest, signal flags on their halyard, fog at the edges, and low sun laying a bright road on the water">
-<div class="in">
-<img class="logo" src="assets/logo.png" alt="One foghorn horn alone: wide bell, short throat, mounting plate at the rear, kelp green shadow side, sand lit edge, and signal red once only on the small valve cap, with the name in the station log hand below">
-<h1>codeintel-git-metadata-analyzer</h1>
-<p>A station log read watch by watch: author addresses counted, commit subjects and local branch names checked against their patterns, and a risk score added by kind.</p>
-<nav><a class="btn" href="#s0">Count the Author Addresses</a><a class="btn" href="#s1">Check the Commit Subjects</a><a class="btn" href="#s2">Check the Local Branches</a><a class="btn" href="#s3">Run the Outside Tools Too</a><a class="btn" href="#s4">Save the Report Elsewhere</a></nav>
-</div>
+  <img class="hero-logo" src="assets/logo.png" alt="One polished cross section disc of a pine trunk with its growth rings clear from bark rim to centre, a brass increment borer lying across it">
+  <h1>codeintel-git-metadata-analyzer</h1>
+  <p class="tagline">The Ring Record. A git metadata analyzer that reads the record a repository has written into itself, its authors, its commit messages, and its branch names, and scores the entries that break its patterns.</p>
+  <div class="btns">
+    <a class="btn solid" href="https://github.com/ShadowGuard-AI/codeintel-git-metadata-analyzer">The repository</a>
+    <a class="btn" href="https://github.com/ShadowGuard-AI/codeintel-git-metadata-analyzer/blob/main/main.py">main.py</a>
+  </div>
 </header>
-<main>
-<section class="panel" id="s0"><h2>Addresses Below the Cut Line</h2><p>It reads a git repository. It counts author addresses from the log, one per line. An address counts as anomalous when its share of all commits falls below one minus the threshold. The default threshold is 0.9, so the cut line is a share below 0.1. It checks commit subjects against a pattern, and local branch names against a pattern, and it adds a risk score. That is the work, logged plain.</p></section><div class="div"></div><section class="panel" id="s1"><h2>Subjects That Miss the Pattern</h2><p>The commit check reads the subject line only. The body is never checked. The default pattern is <code>^[A-Z][a-z]+:\s.*</code>, a capitalised word, a colon, then text. The branch check reads local branches only; remote branches are never checked. Its default pattern is <code>^(feature|bugfix|hotfix|release)/[a-z0-9-]+$</code>.</p><div class="callout"><h3>Subjects Only, Bodies Never Checked</h3><p>A message with a clean subject and a body that breaks the pattern passes. The website states the limit at full size, as the log does.</p></div><pre>python3 main.py REPO_PATH</pre><p>The README usage line reads <code>./codeintel-git-metadata-analyzer [params]</code>, reproduced verbatim and flagged as a placeholder: the parser requires the positional repo_path, which the README lists nowhere.</p></section><div class="div"></div><section class="panel" id="s2"><h2>Branches Outside the Pattern</h2><table><tr><th>Setting</th><th>Record</th></tr><tr><td><code>-h</code></td><td>Help. Exits.</td></tr><tr><td><code>--email_threshold</code></td><td>README text: No description provided. Parser note: threshold for email anomaly detection. Default 0.9.</td></tr><tr><td><code>--commit_message_pattern</code></td><td>Regex pattern for commit message validation.</td></tr><tr><td><code>--branch_name_pattern</code></td><td>Regex pattern for branch name validation.</td></tr><tr><td><code>--output_file</code></td><td>Path to output file to save analysis results. Parser default omitted by the README: analysis_report.txt.</td></tr><tr><td><code>--offensive_tools</code></td><td>README text: No description provided. Parser note: a flag; when set, bandit, flake8, pylint and pyre-check run.</td></tr></table></section><div class="div"></div><section class="panel" id="s3"><h2>A Score That Counts Kinds</h2><p>Email anomalies present: add 0.3. Invalid subjects present: add 0.2. Invalid branches present: add 0.1. Each outside tool with a non failure output: add 0.4. The cap is 1.0.</p><p><span style="color:#c1272d">Caution, in signal red: the score counts kinds, not amounts. One odd address scores the same as half the history.</span></p><p>The outside tools are off by default. Bandit, flake8 and pylint run over the whole tree. Pyre runs only when a .pyre_configuration file exists. Missing tools are reported as text, not as findings. The report is written to the output file in five sections: risk score, author email analysis, commit message validation, branch name validation, and offensive tools analysis. Failure entries: a path that is not a directory ends at exit 1, a report that cannot be saved ends at exit 1, and an unexpected error ends at exit 1 with a logged trace.</p></section><div class="div"></div><section class="panel" id="s4"><h2>Addresses, Logged Flat</h2><div class="callout"><h3>Clone Line Drops the Hyphen</h3><p><code>git clone https://github.com/ShadowGuardAI/codeintel-git-metadata-analyzer</code></p><p>The name in that line is unhyphenated. The correct form is ShadowGuard-AI. The line is shown without quiet repair.</p></div><p>The licence line reads <span>Copyright (c) ShadowGuardAI</span>, the same unhyphenated fault a second time. Against it stands the repository LICENSE file, which carries the MIT License. Both are shown; neither is repaired.</p><p>Repository note, marked as such: requirements.txt lists bandit, flake8, pylint and pyre-check. Main.py itself uses only the standard library; those four are invoked only under the flag.</p></section>
-</main>
-<footer><p>The Foghorn Station. Horn safe in harbour light, crossing done, gulls settling, report filed below.</p></footer>
+<figure>
+  <img src="assets/intro-banner.png" alt="The mounted lens over a polished pine disc close up, the growth rings filling the frame beneath it and a slender increment core at the frame edge">
+  <figcaption>The rings read under the lens, one narrow season standing out among wider ones.</figcaption>
+</figure>
+
+<div class="facts">
+  <div class="fact"><b>History by git</b>Git runs as argument lists with no shell; author addresses are counted from the log</div>
+  <div class="fact"><b>Rare authors</b>An address is anomalous when its share of commits falls below one minus the threshold, under a tenth at the default 0.9</div>
+  <div class="fact"><b>Subjects only</b>Commit messages are checked by subject line alone; bodies are never read, and remote branches are never examined</div>
+  <div class="fact"><b>Flat weights</b>The risk score adds fixed weights by kind, never by amount, and caps at 1.0</div>
+</div>
+<section>
+  <h2>Usage</h2>
+  <pre>python3 main.py REPO_PATH [--email_threshold 0.9] [--commit_message_pattern PATTERN] [--branch_name_pattern PATTERN] [--output_file analysis_report.txt] [--offensive_tools]</pre>
+  <p>The README usage line is a placeholder naming an executable the repo does not ship; the real invocation is the one above. The default message pattern expects a capitalised type word and a colon at the head of the subject. The default branch pattern accepts only feature, bugfix, hotfix, or release prefixes in lowercase, under which a lone main branch is itself an invalid name.</p>
+<table>
+    <tr><th>Option</th><th>What it does</th></tr>
+    <tr><td><code>repo_path</code></td><td>The repository to read. Required. The README parameter list omits it; the code requires it.</td></tr>
+    <tr><td><code>--email_threshold</code></td><td>Default 0.9. The README list gives this No description provided; the help text in main.py gives the default.</td></tr>
+    <tr><td><code>--commit_message_pattern</code></td><td>The subject line pattern, default ^[A-Z][a-z]+: followed by text.</td></tr>
+    <tr><td><code>--branch_name_pattern</code></td><td>The local branch name pattern, with feature, bugfix, hotfix, and release prefixes by default.</td></tr>
+    <tr><td><code>--output_file</code></td><td>Where the report goes. Default analysis_report.txt.</td></tr>
+    <tr><td><code>--offensive_tools</code></td><td>Adds a run of bandit, flake8, pylint, and pyre over the tree; each tool that produces output adds 0.4 to the score.</td></tr>
+  </table>
+</section>
+<section class="hold">
+  <h2>How the score is built</h2>
+  <ul>
+    <li>The weights are flat: 0.3 for any email anomaly, 0.2 for any invalid message, 0.1 for any invalid branch. One odd address scores exactly as much as half the history being odd.</li>
+    <li>Only local branches are judged, so the state of the remote says nothing either way.</li>
+    <li>A repository whose only branch is main fails the branch check on that fact alone.</li>
+  </ul>
+</section>
+<section>
+  <h2>Requirements</h2>
+  <p>Python, plus the four external analyzers listed in the requirements file (bandit, flake8, pylint, and pyre-check, each 1.0.0 or later), which the code invokes only when --offensive_tools is passed.</p>
+</section>
+<footer>
+<p>The README of codeintel-git-metadata-analyzer names the unhyphenated ShadowGuardAI in its clone URL and in its closing copyright line; the repository carries a separate LICENSE file headed MIT License. Both are preserved exactly as printed. Site type is set in Kaisei HarunoUmi and Zen Old Mincho, self-hosted under the SIL Open Font License.</p>
+</footer>
+</div>
 </body>
 </html>
