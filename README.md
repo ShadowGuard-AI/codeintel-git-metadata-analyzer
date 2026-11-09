@@ -6,6 +6,8 @@ Ship log treatment: the title is set in Beau Rivage on a sand plate, ruled benea
 
 ![One polished cross section disc of a pine trunk with its growth rings clear from bark rim to centre, a brass increment borer lying across it](logo.png)
 
+![The laboratory bench in the wood panelled room: a polished pine disc under the mounted lens with its growth rings clear, a grooved holder of increment cores beside it, the brass borer at the bench edge and shelves of further discs standing behind](banner.png)
+
 ![Station in three bands: fog thickens and thins at the edges, the fixed horn darkens at the bell rim twice in a long cycle, a lantern flame flickers at the wick, and the flags lift a little in a brief wind and settle](scene.svg)
 
 
